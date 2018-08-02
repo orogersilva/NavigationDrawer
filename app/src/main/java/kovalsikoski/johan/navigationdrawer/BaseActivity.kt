@@ -1,5 +1,6 @@
 package kovalsikoski.johan.navigationdrawer
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
@@ -10,29 +11,20 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View.inflate
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_base.*
 
 
 open class BaseActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mDrawerLayout = findViewById(R.id.activity_container)
-
-    }
-
     override fun setContentView(layoutResID: Int) {
-        val fullView = inflate(this, R.layout.activity_base, null) as DrawerLayout
-        val activityContainer = fullView.findViewById<View>(R.id.activity_content) as FrameLayout
+
+        mDrawerLayout = inflate(this, R.layout.activity_base, null) as DrawerLayout
+        val activityContainer = mDrawerLayout.findViewById<View>(R.id.activity_content) as FrameLayout
 
         layoutInflater.inflate(layoutResID, activityContainer, true)
-        super.setContentView(fullView)
+        setContentView(mDrawerLayout)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -44,6 +36,8 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         title = "Activity Title"
+
+        setUpNavigationView()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -61,6 +55,41 @@ open class BaseActivity : AppCompatActivity() {
             }
 
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setUpNavigationView() {
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+
+            drawerLayout.closeDrawers()
+            navigateToDrawerItem(menuItem)
+
+             true
+        }
+    }
+
+    private fun navigateToDrawerItem(menuItem: MenuItem) {
+
+        var targetIntent: Intent? = null
+
+        when (menuItem.itemId) {
+
+            R.id.nav_newgame -> {
+
+                targetIntent = Intent(this, NewGameActivity::class.java)
+            }
+
+            R.id.nav_help -> {
+
+                // TODO: To implement to "help screen".
+            }
+        }
+
+        drawerLayout.closeDrawers()
+
+        targetIntent?.let {
+            startActivity(targetIntent)
         }
     }
 }
