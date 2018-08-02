@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View.inflate
+import android.widget.Toast
 
 
 open class BaseActivity : AppCompatActivity() {
@@ -48,9 +49,17 @@ open class BaseActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
                 mDrawerLayout.openDrawer(GravityCompat.START)
                 true
             }
+
+            R.id.nav_newgame -> {
+                Toast.makeText(this, "New Game", Toast.LENGTH_SHORT).show()
+                mDrawerLayout.closeDrawer(GravityCompat.START)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
